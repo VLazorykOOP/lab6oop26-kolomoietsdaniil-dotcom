@@ -11,7 +11,7 @@ class TopLeft {
 protected:
 	int TL_data;
 public:
-	TopLeft() : TL_data(-1) { // За допомогою списка ініціалізації 
+	TopLeft() : TL_data(-1) {
 		cout << "TopLeft was created with default constructor (" << TL_data << ")" << endl;
 	}
 
@@ -98,7 +98,7 @@ public:
 	}
 };
 
-class Bottom : virtual protected TopLeft, protected MidLeft, protected MidRight {
+class Bottom : protected TopLeft, protected MidLeft, protected MidRight {
 protected:
 	int B_data;
 public:
@@ -271,7 +271,7 @@ public:
 	}
 
 	void input_data() override {
-		cout << "Enter signal data:\n";
+		cout << "Entering signal data:\n";
 		cout << "Enter signal type: ";
 		cin >> signalType;
 		cout << "Enter frequency: ";
@@ -306,7 +306,7 @@ public:
 	}
 
 	void input_data() override {
-		cout << "Enter result data:\n";
+		cout << "Entering result data:\n";
 		cout << "Enter saved status (0 for No, 1 for Yes): ";
 		cin >> saved;
 		cout << "Enter execution time: ";
@@ -341,7 +341,7 @@ public:
 	}
 	
 	void input_data() override {
-		cout << "Enter additional data:\n";
+		cout << "Entering additional data:\n";
 		cout << "Enter size (in bytes): ";
 		cin >> size;
 		cout << "Enter date (YYYY-MM-DD): ";
@@ -355,6 +355,8 @@ int main() {
 
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
+
+	Data* storage[3] = { nullptr, nullptr, nullptr };
 
 	int main_choice;
 	do {
@@ -392,33 +394,77 @@ int main() {
 		}
 		case 2: {
 			int sub_choice2;
-			Data* storage[3];
 			do {
 				cout << "\n--- Task 2 ---\n";
 				cout << "1. Input SignalData\n";
 				cout << "2. Input ResultData\n";
+				cout << "3. Input AdditionalData\n";
+				cout << "4. Display all data\n";
+				cout << "5. Save all data\n";
+				cout << "6. Process all data\n";
+				cout << "0. Back to main menu\n";
 				cout << "Your choice: ";
 				cin >> sub_choice2;
 				switch (sub_choice2) {
 				case 1: {
+					if (storage[0]) {
+						delete storage[0];
+						storage[0] = nullptr;
+					}
 					storage[0] = new SignalData();
 					storage[0]->input_data();
 					break;
 				}
 				case 2: {
+					if (storage[1]) {
+						delete storage[1];
+						storage[1] = nullptr;
+					}
 					storage[1] = new ResultData();
 					storage[1]->input_data();
 					break;
 				}
 				case 3:
+					if (storage[2]) {
+						delete storage[2];
+						storage[2] = nullptr;
+					}
 					storage[2] = new AdditionalData();
 					storage[2]->input_data();
 					break;
 				case 4:
+					for (int i = 0; i < 3; ++i) {
+						if (storage[i]) {
+							storage[i]->display();
+						}
+					}
 					break;
-				}
+				case 5:
+					for (int i = 0; i < 3; ++i) {
+						if (storage[i]) {
+							storage[i]->save("data_file.txt");
+						}
+					}
+					break;
+				case 6:
+					for (int i = 0; i < 3; ++i) {
+						if (storage[i]) {
+							storage[i]->process();
+						}
+					}
+					break;
+				case 0:
+					break;
+				} 
 			} while (sub_choice2 != 0); // Крутимо підменю, поки не введемо 0
+			for (int i = 0; i < 3; i++) {
+				if (storage[i] != nullptr) {
+					delete storage[i];
+					storage[i] = nullptr;
+				}
+			}
 			break;
+
 		}
 		case 3: {
 			int sub_choice3;
