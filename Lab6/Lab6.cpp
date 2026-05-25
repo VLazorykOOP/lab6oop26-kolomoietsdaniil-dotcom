@@ -1,5 +1,4 @@
-﻿
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <windows.h>
 
@@ -12,221 +11,280 @@ protected:
 	int TL_data;
 public:
 	TopLeft() : TL_data(-1) {
-		cout << "TopLeft was created with default constructor (" << TL_data << ")" << endl;
+		cout << "TopLeft was created with default constructor" << endl;
 	}
-
-	TopLeft(int d) {
-		TL_data = d;
-		cout << "TopLeft was created with parameterized constructor (" << TL_data << ")" << endl;
-	}
-
+	TopLeft(int TL_data) : TL_data(TL_data) {
+		cout << "TopLeft was created with parameterized constructor" << endl;
+	}	
 	~TopLeft() {
-		cout << "TopLeft with data (" << TL_data << ") is being destroyed" << endl;
+		cout << "TopLeft destructor called" << endl;
 	}
 
+	void input() {
+		cout << "Enter data for TopLeft: ";
+		cin >> TL_data;
+	}
 };
 
 class TopRight {
-protected:
+protected :
 	double TR_data;
 public:
-	TopRight() {
-		TR_data = -1.0;
-		cout << "TopRight was created with default constructor (" << TR_data << ")" << endl;
+	TopRight() : TR_data(-1.0) {
+		cout << "TopRight was created with default constructor" << endl;
 	}
-
-	TopRight(double d) : TR_data(d) {
-		cout << "TopRight was created with parameterized constructor (" << TR_data << ")" << endl;
+	TopRight(double TR_data) : TR_data(TR_data) {
+		cout << "TopRight was created with parameterized constructor" << endl;
 	}
-
 	~TopRight() {
-		cout << "TopRight with data (" << TR_data << ") is being destroyed" << endl;
+		cout << "TopRight destructor called" << endl;
+	}
+	void input() {
+		cout << "Enter data for TopRight: ";
+		cin >> TR_data;
 	}
 };
 
-class MidLeft :protected TopLeft {
+class MLeft : public TopLeft {
 protected:
 	int ML_data;
 public:
-
-	MidLeft() : TopLeft(), ML_data(-1) {
-		cout << "MidLeft was created with default constructor (" << ML_data << ")" << endl;
-
+	MLeft() : ML_data(-1) {
+		cout << "MLeft was created with default constructor" << endl;
 	}
-
-	MidLeft(int TL_data, int ML_data) : TopLeft(TL_data) {
-		this->ML_data = ML_data;
-		cout << "MidLeft was created with parameterized constructor (" << ML_data << ")" << endl;
+	MLeft(int TL_data, int ML_data) : 
+		TopLeft(TL_data), 
+		ML_data(ML_data) {
+		cout << "MLeft was created with parameterized constructor" << endl;
 	}
-
-	~MidLeft() {
-		cout << "MidLeft with data (" << ML_data << ") is being destroyed" << endl;
+	~MLeft() {
+		cout << "MLeft destructor called" << endl;
+	}
+	void input() {
+		TopLeft::input();
+		cout << "Enter data for MLeft: ";
+		cin >> ML_data;
 	}
 };
 
-class MidCenter : protected TopLeft, protected TopRight {
+class MCenter : public TopLeft, public TopRight {
 protected:
 	double MC_data;
 public:
-	MidCenter() : TopLeft(), TopRight(), MC_data(-1.0) {
-		cout << "MidCenter was created with default constructor (" << MC_data << ")" << endl;
+	MCenter() : MC_data(-1.0) {
+		cout << "MCenter was created with default constructor" << endl;
 	}
-	MidCenter(int TL_data, double TR_data, double MC_data) : TopLeft(TL_data), TopRight(TR_data), MC_data(MC_data) {
-		cout << "MidCenter was created with parameterized constructor (" << MC_data << ")" << endl;
+	MCenter(int TL_data, double TR_data, double MC_data) :
+		TopLeft(TL_data), 
+		TopRight(TR_data), 
+		MC_data(MC_data) {
+		cout << "MCenter was created with parameterized constructor" << endl;
 	}
-	~MidCenter() {
-		cout << "MidCenter with data (" << MC_data << ") is being destroyed" << endl;
+	~MCenter() {
+		cout << "MCenter destructor called" << endl;
+	}
+	void input() {
+		TopLeft::input();
+		TopRight::input();
+		cout << "Enter data for MCenter: ";
+		cin >> MC_data;
 	}
 };
 
-class MidRight : protected TopRight, protected MidCenter {
+class MRight : public TopRight, public MCenter {
 protected:
 	double MR_data;
 public:
-	MidRight() : TopRight(), MidCenter(), MR_data(0.0) {
-		cout << "MidRight was created with default constructor (" << MR_data << ")" << endl;
+	MRight() : MR_data(-1.0) {
+		cout << "MRight was created with default constructor" << endl;
 	}
-	MidRight(double TR_data_main, int TL_data, double TR_data_MC, double MC_data, double MR_data) :
-		TopRight(TR_data_main),
-		MidCenter(TL_data, TR_data_MC, MC_data),
-		MR_data(MR_data)
-	{
-		cout << "MidRight was created with parameterized constructor (" << MR_data << ")" << endl;
+	MRight(double TR_data_main, int TL_data, double TR_data, double MC_data, double MR_data) :
+		TopRight(TR_data_main), 
+		MCenter(TL_data, TR_data, MC_data),
+		MR_data(MR_data) {
+		cout << "MRight was created with parameterized constructor" << endl;
 	}
-	~MidRight() {
-		cout << "MidRight with data (" << MR_data << ") is being destroyed" << endl;
+	~MRight() {
+		cout << "MRight destructor called" << endl;
+	}
+	void input() {
+		TopRight::input();
+		MCenter::input();
+		cout << "Enter data for MRight: ";
+		cin >> MR_data;
 	}
 };
 
-class Bottom : protected TopLeft, protected MidLeft, protected MidRight {
+class Bottom : public MLeft, public TopLeft, public MRight {
 protected:
 	int B_data;
 public:
-	Bottom() : TopLeft(), MidLeft(), MidRight(), B_data(0) {
-		cout << "Bottom was created with default constructor (" << B_data << ")" << endl;
+	Bottom() : B_data(-1) {
+		cout << "Bottom was created with default constructor" << endl;
 	}
-	Bottom(int TL_data, int TL_data_ML, int ML_data, double TR_data_main, int TL_data_MC, double TR_data_MC, double MC_data, double MR_data, int B_data) :
-		TopLeft(TL_data),
-		MidLeft(TL_data_ML, ML_data),
-		MidRight(TR_data_main, TL_data_MC, TR_data_MC, MC_data, MR_data),
-		B_data(B_data)
-	{
-		cout << "Bottom was created with parameterized constructor (" << B_data << ")" << endl;
+	Bottom(int TL_data_ML, int ML_data, int TL_data_main, double TR_data_main, int TL_data_MC, double TR_data_MC, double MC_data, double MR_data, int B_data) :
+		MLeft(TL_data_ML, ML_data),
+		TopLeft(TL_data_main),
+		MRight(TR_data_main, TL_data_MC, TR_data_MC, MC_data, MR_data), 
+		B_data(B_data) {
+		cout << "Bottom was created with parameterized constructor" << endl;
 	}
 	~Bottom() {
-		cout << "Bottom with data (" << B_data << ") is being destroyed" << endl;
+		cout << "Bottom destructor called" << endl;
 	}
-
-	
+	void input() {
+		MLeft::input();
+		TopLeft::input();
+		MRight::input();
+		cout << "Enter data for Bottom: ";
+		cin >> B_data;
+	}
 };
 
-// Virtual
+// With virtual
 
 class VrTopLeft {
 protected:
-	int TL_data;
+	int VrTL_data;
 public:
-	VrTopLeft() : TL_data(0) { 
-		cout << "VrTopLeft was created with default constructor (" << TL_data << ")" << endl;
+	VrTopLeft() : VrTL_data(0) {
+		cout << "VrTopLeft was created with default constructor" << endl;
+	}
+	VrTopLeft(int VrTL_data) : VrTL_data(VrTL_data) {
+		cout << "VrTopLeft was created with parameterized constructor" << endl;
+	}
+	virtual ~VrTopLeft() {
+		cout << "VrTopLeft destructor called" << endl;
 	}
 
-	VrTopLeft(int d) {
-		TL_data = d;
-		cout << "VrTopLeft was created with parameterized constructor (" << TL_data << ")" << endl;
+	void input() {
+		cout << "Enter data for VrTopLeft: ";
+		cin >> VrTL_data;
 	}
-
-	~VrTopLeft() {
-		cout << "VrTopLeft with data (" << TL_data << ") is being destroyed" << endl;
-	}
-
 };
 
 class VrTopRight {
 protected:
-	double TR_data;
+	double VrTR_data;
 public:
-	VrTopRight() {
-		TR_data = 0.0;
-		cout << "VrTopRight was created with default constructor (" << TR_data << ")" << endl;
+	VrTopRight() : VrTR_data(0.0) {
+		cout << "VrTopRight was created with default constructor" << endl;
 	}
-	
-	VrTopRight(double d) : TR_data(d) {
-		cout << "VrTopRight was created with parameterized constructor (" << TR_data << ")" << endl;
+	VrTopRight(double VrTR_data) : VrTR_data(VrTR_data) {
+		cout << "VrTopRight was created with parameterized constructor" << endl;
 	}
-	
-	~VrTopRight() {
-		cout << "VrTopRight with data (" << TR_data << ") is being destroyed" << endl;
+	virtual ~VrTopRight() {
+		cout << "VrTopRight destructor called" << endl;
+	}
+	void input() {
+		cout << "Enter data for VrTopRight: ";
+		cin >> VrTR_data;
 	}
 };
 
-class VrMidLeft : virtual protected VrTopLeft {
+class VrMLeft : public virtual VrTopLeft {
 protected:
-	int ML_data;
+	int VrML_data;
 public:
-
-	VrMidLeft() : VrTopLeft(), ML_data(0) {
-		cout << "VrMidLeft was created with default constructor (" << ML_data << ")" << endl;
-
+	VrMLeft() : VrML_data(0) {
+		cout << "VrMLeft was created with default constructor" << endl;
 	}
-
-	VrMidLeft(int TL_data, int ML_data) : VrTopLeft(TL_data) {
-		this->ML_data = ML_data;
-		cout << "VrMidLeft was created with parameterized constructor (" << ML_data << ")" << endl;
+	VrMLeft(int TL_data, int ML_data) :
+		VrTopLeft(TL_data),
+		VrML_data(ML_data) {
+		cout << "VrMLeft was created with parameterized constructor" << endl;
 	}
-
-	~VrMidLeft() {
-		cout << "VrMidLeft with data (" << ML_data << ") is being destroyed" << endl;
+	~VrMLeft() {
+		cout << "VrMLeft destructor called" << endl;
+	}
+	void input() {
+		VrTopLeft::input();
+		cout << "Enter data for VrMLeft: ";
+		cin >> VrML_data;
 	}
 };
 
-class VrMidCenter : virtual protected VrTopLeft, virtual  protected VrTopRight {
+class VrMCenter : public virtual VrTopLeft, public virtual VrTopRight {
 protected:
-	double MC_data;
+	double VrMC_data;
 public:
-	VrMidCenter() : VrTopLeft(), VrTopRight(), MC_data(0.0) {
-		cout << "VrMidCenter was created with default constructor (" << MC_data << ")" << endl;
+	VrMCenter() : VrMC_data(0.0) {
+		cout << "VrMCenter was created with default constructor" << endl;
 	}
-	VrMidCenter(int TL_data, double TR_data, double MC_data) : VrTopLeft(TL_data), VrTopRight(TR_data), MC_data(MC_data) {
-		cout << "VrMidCenter was created with parameterized constructor (" << MC_data << ")" << endl;
+	VrMCenter(int VrTL_data, double VrTR_data, double VrMC_data) :
+		VrTopLeft(VrTL_data),
+		VrTopRight(VrTR_data),
+		VrMC_data(VrMC_data) {
+		cout << "VrMCenter was created with parameterized constructor" << endl;
 	}
-	~VrMidCenter() {
-		cout << "VrMidCenter with data (" << MC_data << ") is being destroyed" << endl;
+	~VrMCenter() {
+		cout << "VrMCenter destructor called" << endl;
+	}
+	void input() {
+		VrTopLeft::input();
+		VrTopRight::input();
+		cout << "Enter data for VrMCenter: ";
+		cin >> VrMC_data;
 	}
 };
 
-class VrMidRight : virtual protected VrTopRight, protected VrMidCenter {
-protected :
-	double MR_data;
-public:
-	VrMidRight() : VrTopRight(), VrMidCenter(), MR_data(0.0) {
-		cout << "VrMidRight was created with default constructor (" << MR_data << ")" << endl;
-	}
-	VrMidRight(double TR_data_main, int TL_data, double TR_data_MC, double MC_data, double MR_data) : VrTopRight(TR_data_main), VrMidCenter(TL_data, TR_data_MC, MC_data), MR_data(MR_data) {
-		cout << "VrMidRight was created with parameterized constructor (" << MR_data << ")" << endl;
-	}
-	~VrMidRight() {
-		cout << "VrMidRight with data (" << MR_data << ") is being destroyed" << endl;
-	}
-};
-
-class VrBottom : virtual protected VrTopLeft, protected VrMidLeft, protected VrMidRight, virtual protected VrTopRight {
+class VrMRight : public virtual VrTopRight, public VrMCenter {
 protected:
-	int B_data;
+	double VrMR_data;
 public:
-	VrBottom() : VrTopLeft(), VrMidLeft(), VrTopRight(), VrMidRight(), B_data(0) {
-		cout << "VrBottom was created with default constructor (" << B_data << ")" << endl;
+	VrMRight() : VrMR_data(0.0) {
+		cout << "VrMRight was created with default constructor" << endl;
 	}
-	VrBottom(int TL_data_main, int ML_data, double TR_data_main, double MC_data, int TL_data_MC, double TR_data_MC, double MR_data, int B_data):
-		VrTopLeft(TL_data_main),
-		VrTopRight(TR_data_main),
-		VrMidLeft(TL_data_main, ML_data),
-		VrMidRight(TR_data_main, TL_data_MC, TR_data_MC, MC_data, MR_data),
-		B_data(B_data)
-	{
-		cout << "VrBottom was created with parameterized constructor (" << B_data << ")" << endl;
+	VrMRight(double VrTR_data_main, int VrTL_data, double VrTR_data, double VrMC_data, double VrMR_data) :
+		VrTopRight(VrTR_data_main),
+		VrMCenter(VrTL_data, VrTR_data, VrMC_data),
+		VrMR_data(VrMR_data) {
+		cout << "VrMRight was created with parameterized constructor" << endl;
+	}
+	~VrMRight() {
+		cout << "VrMRight destructor called" << endl;
+	}
+	void input() {
+		VrTopRight::input();
+		VrMCenter::input();
+		cout << "Enter data for VrMRight: ";
+		cin >> VrMR_data;
+	}
+};
+
+class VrBottom : public virtual VrTopLeft, public virtual VrTopRight, public VrMLeft,  public VrMRight {
+protected:
+	int VrB_data;
+public:
+	VrBottom() : VrB_data(0) {
+		cout << "VrBottom was created with default constructor" << endl;
+	}
+	VrBottom(int VrTL_data, double VrTR_data, int VrML_data, double VrMC_data, double VrMR_data, int VrB_data) :
+		VrTopLeft(VrTL_data),
+		VrTopRight(VrTR_data),
+		VrMLeft(VrTL_data, VrML_data),
+		VrMRight(VrTR_data, VrTL_data, VrTR_data, VrMC_data, VrMR_data),
+		VrB_data(VrB_data) {
+		cout << "VrBottom was created with parameterized constructor" << endl;
 	}
 	~VrBottom() {
-		cout << "VrBottom with data (" << B_data << ") is being destroyed" << endl;
+		cout << "VrBottom destructor called" << endl;
+	}
+	
+	void input() {
+		cout << "Enter data for VrTopLeft:\n";
+		cin >> VrTL_data;
+		cout << "Enter data for VrTopRight:\n";
+		cin >> VrTR_data;
+		cout << "Enter data for VrMLeft:\n";
+		cin >> VrML_data;
+		cout << "Enter data for VrMCenter:\n";
+		cin >> VrMC_data;
+		cout << "Enter data for VrMRight:\n";
+		cin >> VrMR_data;
+		cout << "Enter data for VrBottom: ";
+		cin >> VrB_data;
+
 	}
 };
 
@@ -350,151 +408,249 @@ public:
 
 };
 
+// Task 3
 
-int main() {
+class Person {
+protected:
+	string name;
+	int age;
+public:
+	Person() : name("Unknown"), age(0) {
+		cout << "Person was created with default constructor" << endl;
+	}
+	Person(string name, int age) : name(name), age(age) {
+		cout << "Person was created with parameterized constructor" << endl;
+	}
+	virtual ~Person() {
+		cout << "Person destructor called" << endl;
+	}
 
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
+	string tostring() {
+		return "Name: " + name + ", Age: " + to_string(age);
+	}
+};
 
-	Data* storage[3] = { nullptr, nullptr, nullptr };
+class Worker : public virtual  Person {
+protected:
+	string position;
+public:
+	Worker() : position("Unknown") {
+		cout << "Worker was created with default constructor" << endl;
+	}
+	Worker(string name, int age, string position) : Person(name, age), position(position) {
+		cout << "Worker was created with parameterized constructor" << endl;
+	}
+	~Worker() {
+		cout << "Worker destructor called" << endl;
+	}
 
-	int main_choice;
-	do {
-		cout << "Main menu\n";
-		cout << "1.Task: \n";
-		cout << "2.Task: \n";
-		cout << "3.Task: \n";
-		cout << "0.Exit \n";
-		cout << "Choise: ";
-		cin >> main_choice;
+	string tostring() {
+		return "Position: " + position + ", " + Person::tostring();
+	}
+};
 
-		switch (main_choice) {
+class Woman : public virtual Person {
+protected:
+	string hobby;
+	public:
+	Woman() : hobby("Unknown") {
+		cout << "Woman was created with default constructor" << endl;
+	}
+	Woman(string name, int age, string hobby) : Person(name, age), hobby(hobby) {
+		cout << "Woman was created with parameterized constructor" << endl;
+	}
+	~Woman() {
+		cout << "Woman destructor called" << endl;
+	}
+	string tostring() {
+		return "Hobby: " + hobby + ", " + Person::tostring();
+	}
+};
 
-		case 1: {
-			int sub_choice;
-			do {
-				cout << "\n--- Task 1 ---\n";
-				cout << "Your choice: ";
-				cin >> sub_choice;
+class FemaleWorker : public Worker, public Woman, public virtual Person {
+protected:
+	int experienceYears;
+public:
+	FemaleWorker() : experienceYears(0) {
+		cout << "FemaleWorker was created with default constructor" << endl;
+	}
+	FemaleWorker(string name, int age, string position, string hobby, int experienceYears) :
+		Person(name, age),
+		Worker(name, age, position),
+		Woman(name, age, hobby),
+		experienceYears(experienceYears) {
+		cout << "FemaleWorker was created with parameterized constructor" << endl;
+	}
+	~FemaleWorker() {
+		cout << "FemaleWorker destructor called" << endl;
+	}
 
-				switch (sub_choice) {
-				case 1:
-					break;
-				case 2:
-					break;
-				case 3:
-					break;
-				case 4:
-					break;
-				case 5:
-					break;
-				}
-			} while (sub_choice != 0); // Крутимо підменю, поки не введемо 0
-			break;
-		}
-		case 2: {
-			int sub_choice2;
-			do {
-				cout << "\n--- Task 2 ---\n";
-				cout << "1. Input SignalData\n";
-				cout << "2. Input ResultData\n";
-				cout << "3. Input AdditionalData\n";
-				cout << "4. Display all data\n";
-				cout << "5. Save all data\n";
-				cout << "6. Process all data\n";
-				cout << "0. Back to main menu\n";
-				cout << "Your choice: ";
-				cin >> sub_choice2;
-				switch (sub_choice2) {
-				case 1: {
-					if (storage[0]) {
-						delete storage[0];
-						storage[0] = nullptr;
+	string tostring() {
+		return "Name : " + name + ", Age: " + to_string(age) + ", Position: " + position + ", Hobby: " + hobby + ", Experience Years: " + to_string(experienceYears);
+	}
+	};
+
+
+	int main() {
+		SetConsoleCP(1251);
+		SetConsoleOutputCP(1251);
+
+		Data* storage[3] = { nullptr, nullptr, nullptr };
+		FemaleWorker fw;
+		int main_choice;
+
+		do {
+			cout << "\nMain menu\n";
+			cout << "1.Task: Multiple Inheritance\n";
+			cout << "2.Task: Data Management\n";
+			cout << "3.Task:  \n";
+			cout << "0.Exit \n";
+			cout << "Choice: ";
+			cin >> main_choice;
+
+			switch (main_choice) {
+			case 1: {
+				int sub_choice;
+				do {
+					cout << "\n--- Task 1 ---\n";
+					cout << "1. Create Bottom\n";
+					cout << "2. Create Bottom (virtual)\n";
+					cout << "3. Show sizes both\n";
+					cout << "0. Back to main menu\n";
+					cout << "Your choice: ";
+					cin >> sub_choice;
+					switch (sub_choice) {
+					case 1: {
+						Bottom b;
+						cout << "Input data for Bottom:\n";
+						b.input();
+						break;
 					}
-					storage[0] = new SignalData();
-					storage[0]->input_data();
-					break;
-				}
-				case 2: {
-					if (storage[1]) {
-						delete storage[1];
-						storage[1] = nullptr;
+					case 2: {
+						VrBottom vrb;
+						cout << "Input data for VrBottom:\n";
+						vrb.input();
+						break;
 					}
-					storage[1] = new ResultData();
-					storage[1]->input_data();
-					break;
-				}
-				case 3:
-					if (storage[2]) {
-						delete storage[2];
-						storage[2] = nullptr;
+					case 3: {
+						cout << "Size of Bottom: " << sizeof(Bottom) << " bytes";
+						cout << "\nSize of VrBottom: " << sizeof(VrBottom) << " bytes\n";
+						break;
 					}
-					storage[2] = new AdditionalData();
-					storage[2]->input_data();
-					break;
-				case 4:
-					for (int i = 0; i < 3; ++i) {
-						if (storage[i]) {
-							storage[i]->display();
-						}
+					case 0:
+						break;
 					}
-					break;
-				case 5:
-					for (int i = 0; i < 3; ++i) {
-						if (storage[i]) {
-							storage[i]->save("data_file.txt");
-						}
-					}
-					break;
-				case 6:
-					for (int i = 0; i < 3; ++i) {
-						if (storage[i]) {
-							storage[i]->process();
-						}
-					}
-					break;
-				case 0:
-					break;
-				} 
-			} while (sub_choice2 != 0); // Крутимо підменю, поки не введемо 0
-			for (int i = 0; i < 3; i++) {
-				if (storage[i] != nullptr) {
-					delete storage[i];
-					storage[i] = nullptr;
-				}
+				} while (sub_choice != 0);
+				break;
 			}
-			break;
+			case 2: {
+				int sub_choice2;
+				do {
+					cout << "\n--- Task 2 ---\n";
+					cout << "1. Input SignalData\n";
+					cout << "2. Input ResultData\n";
+					cout << "3. Input AdditionalData\n";
+					cout << "4. Display all data\n";
+					cout << "5. Save all data\n";
+					cout << "6. Process all data\n";
+					cout << "0. Back to main menu\n";
+					cout << "Your choice: ";
+					cin >> sub_choice2;
+					switch (sub_choice2) {
+					case 1: {
+						if (storage[0]) {
+							delete storage[0];
+							storage[0] = nullptr;
+						}
+						storage[0] = new SignalData();
+						storage[0]->input_data();
+						break;
+					}
+					case 2: {
+						if (storage[1]) {
+							delete storage[1];
+							storage[1] = nullptr;
+						}
+						storage[1] = new ResultData();
+						storage[1]->input_data();
+						break;
+					}
+					case 3: {
+						if (storage[2]) {
+							delete storage[2];
+							storage[2] = nullptr;
+						}
+						storage[2] = new AdditionalData();
+						storage[2]->input_data();
+						break;
+					}
+					case 4: {
+						for (int i = 0; i < 3; ++i) {
+							if (storage[i]) {
+								storage[i]->display();
+							}
+						}
+						break;
+					}
+					case 5: {
+						for (int i = 0; i < 3; ++i) {
+							if (storage[i]) {
+								storage[i]->save("data_file_" + to_string(i) + ".txt");
+							}
+						}
+						break;
+					}
+					case 6: {
+						for (int i = 0; i < 3; ++i) {
+							if (storage[i]) {
+								storage[i]->process();
+							}
+						}
+						break;
+					}
+					case 0:
+						break;
+					}
+				} while (sub_choice2 != 0);
 
-		}
-		case 3: {
-			int sub_choice3;
-			do {
-				cout << "\n--- Task 3---\n";
-				cout << "Your choice: ";
-				cin >> sub_choice3;
-				switch (sub_choice3) {
-				case 1:
-				
-					break;
-				case 2: {
-	
-					break;
+				// Очищення пам'яті після виходу з 2 завдання
+				for (int i = 0; i < 3; i++) {
+					if (storage[i] != nullptr) {
+						delete storage[i];
+						storage[i] = nullptr;
+					}
 				}
-				case 3:
+				break;
+			}
+			case 3: {
+				int sub_choice3;
+				do {
+					cout << "\n--- Task 3---\n";
+					cout << "1. Create FemaleWorker\n";
+					cout << "2. Show FemaleWorker info\n";
+					cout << "0. Back to main menu\n";
+					cout << "Your choice: ";
+					cin >> sub_choice3;
+					switch (sub_choice3) {
+					case 1:
+						fw = FemaleWorker("Anna", 30, "Engineer", "Painting", 5);
+						cout << "Data created successfully!\n";
+						break;
+					case 2:
+						cout << fw.tostring() << endl;
+						break;
+					case 0:
+						break;
+					}
+				} while (sub_choice3 != 0);
+				break;
+			}
+			case 0: {
+				cout << "\nThanks for working\n";
+				break;
+			}
+			}
+		} while (main_choice != 0);
 
-					break;
-				case 0:
-					break;
-				}
-			} while (sub_choice3 != 0);
-			break;
-		}
-		case 0:
-			cout << "\nThanks for working\n";
-			break;
-		}
-	} while (main_choice != 0);
-
-	return 0;
-}
-
+		return 0;
+	}
