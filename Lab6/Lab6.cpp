@@ -503,7 +503,7 @@ public:
 			cout << "\nMain menu\n";
 			cout << "1.Task: Multiple Inheritance\n";
 			cout << "2.Task: Data Management\n";
-			cout << "3.Task:  \n";
+			cout << "3.Task: Multiharitage  \n";
 			cout << "0.Exit \n";
 			cout << "Choice: ";
 			cin >> main_choice;
@@ -613,7 +613,6 @@ public:
 					}
 				} while (sub_choice2 != 0);
 
-				// Очищення пам'яті після виходу з 2 завдання
 				for (int i = 0; i < 3; i++) {
 					if (storage[i] != nullptr) {
 						delete storage[i];
